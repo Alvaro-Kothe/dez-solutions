@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS green_trip (
+  VendorID smallint,
+  lpep_pickup_datetime timestamp not null,
+  lpep_dropoff_datetime timestamp not null,
+  store_and_fwd_flag boolean,
+  RatecodeID smallint,
+  PULocationID int,
+  DOLocationID int,
+  passenger_count smallint,
+  trip_distance numeric,
+  fare_amount numeric,
+  extra numeric,
+  mta_tax numeric,
+  tip_amount numeric,
+  tolls_amount numeric,
+  ehail_fee numeric,
+  improvement_surcharge numeric,
+  total_amount numeric,
+  payment_type smallint,
+  trip_type smallint,
+  congestion_surcharge numeric,
+  CONSTRAINT trip_unique UNIQUE(lpep_pickup_datetime, lpep_dropoff_datetime, pulocationid, dolocationid, fare_amount, trip_distance)
+);
