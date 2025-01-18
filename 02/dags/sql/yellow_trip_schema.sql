@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS yellow_trip (
+    insertedid int NOT NULL REFERENCES inserted_data (insertedid),
+    vendorid smallint,
+    tpep_pickup_datetime timestamp NOT NULL,
+    tpep_dropoff_datetime timestamp NOT NULL,
+    passenger_count smallint,
+    trip_distance numeric,
+    ratecodeid smallint,
+    store_and_fwd_flag boolean,
+    pulocationid int,
+    dolocationid int,
+    payment_type smallint,
+    fare_amount numeric,
+    extra numeric,
+    mta_tax numeric,
+    tip_amount numeric,
+    tolls_amount numeric,
+    improvement_surcharge numeric,
+    total_amount numeric,
+    congestion_surcharge numeric
+);

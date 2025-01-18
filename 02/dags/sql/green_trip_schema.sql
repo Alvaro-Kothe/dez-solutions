@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS green_trip (
+    insertedid int NOT NULL REFERENCES inserted_data (insertedid),
     vendorid smallint,
     lpep_pickup_datetime timestamp NOT NULL,
     lpep_dropoff_datetime timestamp NOT NULL,
@@ -18,13 +19,5 @@ CREATE TABLE IF NOT EXISTS green_trip (
     total_amount numeric,
     payment_type smallint,
     trip_type smallint,
-    congestion_surcharge numeric,
-    CONSTRAINT trip_unique UNIQUE (
-        lpep_pickup_datetime,
-        lpep_dropoff_datetime,
-        pulocationid,
-        dolocationid,
-        fare_amount,
-        trip_distance
-    )
+    congestion_surcharge numeric
 );
