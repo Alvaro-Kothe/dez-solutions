@@ -15,35 +15,42 @@
    pip 24.3.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)
    ```
 
-2. db:5432
+2. db:5432, postgres:5432
 
    Services within the same network are accessible by the service name and port.
 
-3. 104,838; 199,013; 109,645; 27,688; 35,202
+3. 104,802; 198,924; 109,603; 27,678; 35,189
 
    ```psql
    taxi=# select trip_cat, count(trip_cat) from (select case
-   when trip_distance <= 1 then 0
-   when trip_distance <= 3 then 1
-   when trip_distance <= 7 then 3
-   when trip_distance <= 10 then 7
-   else 10
-   end as trip_cat from green_taxi_trips) as td group by trip_cat
-   ;
+      when trip_distance <= 1 then 0
+      when trip_distance <= 3 then 1
+      when trip_distance <= 7 then 3
+      when trip_distance <= 10 then 7
+      else 10
+      end as trip_cat from green_trip where lpep_dropoff_datetime >= '2019-10-01' and lpep_dropoff_datetime < '2019-11-01')
+      as td
+      group by trip_cat
+      order by trip_cat
+      ;
     trip_cat | count
    ----------+--------
-           0 | 104838
-           1 | 199013
-           3 | 109645
-           7 |  27688
-          10 |  35202
+           0 | 104802
+           1 | 198924
+           3 | 109603
+           7 |  27678
+          10 |  35189
    (5 rows)
    ```
+
+   I think that this answer is wrong, because its restricting only to trips that ended on October.
+   If someone was picked up in October and the trip ended in November,
+   it should still counts, because the trip occurred during the period of October.
 
 4. 2019-10-31
 
    ```psql
-   taxi=# select lpep_pickup_datetime, trip_distance from green_taxi_trips order by trip_distance desc limit 5;
+   taxi=# select lpep_pickup_datetime, trip_distance from green_trip order by trip_distance desc limit 5;
    lpep_pickup_datetime | trip_distance
    ----------------------+---------------
    2019-10-31 23:23:41  |        515.89
@@ -57,7 +64,7 @@
 5. East Harlem North, East Harlem South, Morningside Heights (74, 75, 166)
 
    ```psql
-   taxi=# select "PULocationID", sum(total_amount) from green_taxi_trips where lpep_pickup_datetime like '2019-10-18%' group by "PULocationID" having sum(total_amount) > 13000;
+   taxi=# select "PULocationID", sum(total_amount) from green_trip where lpep_pickup_datetime like '2019-10-18%' group by "PULocationID" having sum(total_amount) > 13000;
     PULocationID |        sum
    --------------+--------------------
               74 |  18686.68000000008
@@ -71,7 +78,7 @@
 6. JFK Airport
 
    ```psql
-   taxi=#  select "DOLocationID", tip_amount from green_taxi_trips where lpep_pickup_datetime like '2019-10-%' and "PULocationID" = 74 order by tip_amount desc limit 5;
+   taxi=#  select "DOLocationID", tip_amount from green_trip where lpep_pickup_datetime like '2019-10-%' and "PULocationID" = 74 order by tip_amount desc limit 5;
    DOLocationID | tip_amount
    --------------+------------
            132 |       87.3
