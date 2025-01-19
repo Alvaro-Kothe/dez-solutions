@@ -75,6 +75,14 @@
 
    I should join, but I didn't load the zone lookup yet.
 
+   ```console
+   $ wget -qO- https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv | grep -we 74 -we 75 -we 166
+   74,"Manhattan","East Harlem North","Boro Zone"
+   75,"Manhattan","East Harlem South","Boro Zone"
+   166,"Manhattan","Morningside Heights","Boro Zone"
+   ```
+
+
 6. JFK Airport
 
    ```psql
@@ -87,6 +95,11 @@
            74 |         35
                1 |      26.45
    (5 rows)
+   ```
+
+   ```console
+   $ wget -qO- https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv | grep -we 132
+   132,"Queens","JFK Airport","Airports"
    ```
 
 7. `terraform init`, `terraform apply -auto-approve`, `terraform destroy`
