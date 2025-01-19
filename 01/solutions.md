@@ -28,7 +28,8 @@
       when trip_distance <= 7 then 3
       when trip_distance <= 10 then 7
       else 10
-      end as trip_cat from green_trip where lpep_dropoff_datetime >= '2019-10-01' and lpep_dropoff_datetime < '2019-11-01')
+      end as trip_cat from green_trip 
+      where lpep_pickup_datetime >= '2019-10-01' and lpep_dropoff_datetime < '2019-11-01')
       as td
       group by trip_cat
       order by trip_cat
@@ -42,10 +43,6 @@
           10 |  35189
    (5 rows)
    ```
-
-   I think that this answer is wrong, because its restricting only to trips that ended on October.
-   If someone was picked up in October and the trip ended in November,
-   it should still counts, because the trip occurred during the period of October.
 
 4. 2019-10-31
 
