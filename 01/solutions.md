@@ -61,42 +61,42 @@
 5. East Harlem North, East Harlem South, Morningside Heights (74, 75, 166)
 
    ```psql
-   taxi=# select "PULocationID", sum(total_amount) from green_trip where lpep_pickup_datetime like '2019-10-18%' group by "PULocationID" having sum(total_amount) > 13000;
-    PULocationID |        sum
-   --------------+--------------------
-              74 |  18686.68000000008
-              75 | 16797.260000000057
-             166 | 13029.790000000032
+   taxi=# select pulocationid, zone, sum(total_amount) 
+    from green_trip 
+    left JOIN taxi_zone ON green_trip.pulocationid = taxi_zone.locationid
+    where lpep_pickup_datetime::date = '2019-10-18' 
+    group by pulocationid, zone
+    having sum(total_amount) > 13000;
+
+     pulocationid |        zone         |   sum    
+    --------------+---------------------+----------
+               74 | East Harlem North   | 18686.68
+               75 | East Harlem South   | 16797.26
+              166 | Morningside Heights | 13029.79
    (3 rows)
    ```
-
-   I should join, but I didn't load the zone lookup yet.
-
-   ```console
-   $ wget -qO- https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv | grep -we 74 -we 75 -we 166
-   74,"Manhattan","East Harlem North","Boro Zone"
-   75,"Manhattan","East Harlem South","Boro Zone"
-   166,"Manhattan","Morningside Heights","Boro Zone"
-   ```
-
 
 6. JFK Airport
 
    ```psql
-   taxi=#  select "DOLocationID", tip_amount from green_trip where lpep_pickup_datetime like '2019-10-%' and "PULocationID" = 74 order by tip_amount desc limit 5;
-   DOLocationID | tip_amount
-   --------------+------------
-           132 |       87.3
-           263 |      80.88
-           74 |         40
-           74 |         35
-               1 |      26.45
-   (5 rows)
-   ```
+   taxi=#  SELECT t.tip_amount, dozone.zone
+    FROM green_trip t
+    INNER JOIN taxi_zone puzone ON t.pulocationid = puzone.locationid
+    INNER JOIN taxi_zone dozone ON t.dolocationid = dozone.locationid
+    WHERE puzone.zone = 'East Harlem North' AND
+        t.lpep_pickup_datetime >= '2019-10-01' AND
+        t.lpep_pickup_datetime < '2019-11-01'
+    ORDER BY tip_amount DESC
+    LIMIT 5;
 
-   ```console
-   $ wget -qO- https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv | grep -we 132
-   132,"Queens","JFK Airport","Airports"
+     tip_amount |       zone        
+    ------------+-------------------
+           87.3 | JFK Airport
+          80.88 | Yorkville West
+             40 | East Harlem North
+             35 | East Harlem North
+          26.45 | Newark Airport
+   (5 rows)
    ```
 
 7. `terraform init`, `terraform apply -auto-approve`, `terraform destroy`
