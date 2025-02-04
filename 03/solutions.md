@@ -50,23 +50,12 @@
    )
    ```
 
-   > [!NOTE]
-   > There is a typo tpep_dropoff_timedate -> tpep_dropoff_datetime
-
 6. 310.24 MB for non-partitioned table and 26.84 MB for the partitioned table
 
    ```sql
-   CREATE TABLE
-   taxi_data.yellow_trip_part_clust
-   PARTITION BY
-     DATE_TRUNC(tpep_dropoff_datetime, DAY)
-   CLUSTER BY
-     VendorID
-   AS (
-     SELECT *
-     FROM
-       `taxi_data.yellow_trip_external`
-   ); -- This query will process 26.84 MB when run.
+   SELECT DISTINCT(VendorID)
+   FROM `taxi_data.yellow_trip_part_clust`
+   WHERE tpep_dropoff_datetime BETWEEN '2024-03-01' AND '2024-03-15'; -- This query will process 26.84 MB when run.
 
    SELECT DISTINCT(VendorID)
    FROM `taxi_data.yellow_trip_native`
