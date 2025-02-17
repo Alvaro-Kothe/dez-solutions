@@ -1,0 +1,37 @@
+[
+  {
+    "name": "dispatching_base_num",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pickup_datetime",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "dropoff_datetime",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "pulocationid",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "dolocationid",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "sr_flag",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "affiliated_base_number",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

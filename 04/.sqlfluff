@@ -1,0 +1,16 @@
+[sqlfluff]
+dialect = bigquery
+templater = jinja
+sql_file_exts = .sql,.sql.j2,.dml,.ddl
+exclude_rules = references.keywords
+
+[sqlfluff:indentation]
+indented_joins = False
+indented_using_on = True
+template_blocks_indent = False
+
+[sqlfluff:templater]
+unwrap_wrapped_queries = True
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
