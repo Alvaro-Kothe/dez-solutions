@@ -60,7 +60,7 @@
 
 6. green: {p97: 55.0, p95: 45.0, p90: 26.5}, yellow: {p97: 31.5, p95: 25.5, p90: 19.0}
 
-    ```
+    ```sql
     SELECT * FROM `raw_nyc_tripdata.fct_taxi_trips_monthly_fare_p95` WHERE year = 2020 AND month = 4
     ```
 
