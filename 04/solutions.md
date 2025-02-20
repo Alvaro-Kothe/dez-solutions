@@ -15,20 +15,25 @@
 
 3. `dbt run ...` ?
 
-    > By default, `dbt run` executes all of the models in the dependency graph
-
     According to the [`--select` docs](https://docs.getdbt.com/reference/node-selection/syntax#how-does-selection-work),
     the `+` prefixed operator selects a model and all of its ancestors (parents).
     The `+` suffix operator selects the model and all of its children.
 
     - `dbt run` runs everything ❌
-    - The `--select +models/core/dim_taxi_trips.sql+` will select `fct_taxi_monthly_zone_revenue` because it is a children. ❌
+
+        > By default, `dbt run` executes all of the models in the dependency graph
+
+    - The `--select +models/core/dim_taxi_trips.sql+` will select `fct_taxi_monthly_zone_revenue` because it is a children. ❓
         - This may not run because of `--target prod` because it will throw an error if there is no target named prod,
           so it will not materialize the `fct_taxi_monthly_zone_revenue` table there isn't a `prod` target.
-          The main problem is that there is no specification about the targets and the environment.
+          The main problem is that there is no specification about the profiles.
     - The `--select +models/core/fct_taxi_monthly_zone_revenue.sql` will run the model and all of its parents. ❌
     - `--select +models/core/` will run `fct_taxi_monthly_zone_revenue` because it's located in the `models/core` directory (according to the last item). ❌
-    - `--select models/staging/+` will run `fct_taxi_monthly_zone_revenue` because it will run the children of `models/staging`. ❌
+    - `--select models/staging/+` will not run `fct_taxi_monthly_zone_revenue`. ✔️
+
+        Before it runs `fct_taxi_monthly_zone_revenue`,
+        the pipeline will error because it can't build `dim_taxi_trips`
+        since the dependency `dim_zone_lookup` (maybe) won't run.
 
 4. 1,3,4,5 are True
 
