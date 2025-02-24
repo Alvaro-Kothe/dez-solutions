@@ -1,0 +1,4 @@
+.venv
+repartitioned/
+yellow_tripdata_2024-10.parquet
+taxi_zone_lookup.csv
